@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/nekosotsuken/chat re/style.css">
+</head>
+
+<body>
+<div class="chat-list">
+    <div class="chat-room" onclick="openChat('Chat1')">
+        <i class="bi bi-chat-dots"></i>
+        Chat 1
+    </div>
+    <div class="chat-room" onclick="openChat('Chat2')">
+        <i class="bi bi-chat-dots"></i>
+        Chat 2
+    </div>
+    <div class="chat-room" onclick="openChat('Chat3')">
+        <i class="bi bi-chat-dots"></i>
+        Chat 3
+    </div>
+</div>
+
+<!-- dummyMessagesを表示 -->
+<div id="chatContent" class="chat-content"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY9iVfux/L6CZ5gqVMpCEjzg5N92tF4FVqcjz"
+        crossorigin="anonymous"></script>
+<script src="index.js"></script>
+</body>
+</html>

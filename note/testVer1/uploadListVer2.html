@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Upload List Version 2</title>
+    <link rel="stylesheet" href="/note/testVer1/style.css">
+</head>
+
+<body>
+
+
+<div class="main-container">
+    <div class="post-container" id="post-container"></div> <!-- 投稿内容のレイアウト-->
+
+    <button id="open-input" onclick="openInputArea()">
+        <i class="bi bi-pencil"></i>
+    </button>
+
+    <div class="overlay" id="overlay"></div> <!--　 <button id="open-input" をクリックした後、背景の色を変える -->
+
+    <!--  投稿画面のレイアウト-->
+    <div class="input-form" id="input-form">
+        <div class="input-formBox">
+            <div class="a">
+                <label for="input-title">タイトル</label>
+                <input type="text" id="input-title" name="input-title"/>
+
+                <label for="input-link">リンク</label>
+                <input type="text" id="input-link" name="input-link"/>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="goBack()">戻る</button>
+
+                <button type="button" onclick="inputControl()">
+                    <i class="bi bi-send-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <a href="/nekosotsuken/note/jojaku/notion_url.html" id="help-link" target="_blank">
+            <i class="bi bi-question-circle" id="help-icon"></i>
+        </a>
+    </div>
+</div>
+
+<script src="inputScript.js"></script>
+</body>
+
+</html>

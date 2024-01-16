@@ -1,0 +1,106 @@
+
+
+/* アイコンの背景色をヘッダーに合わせる */
+.header .chat-members-button {
+    color: white; /* アイコンのテキストカラーを白に設定 */
+}
+/* チャット入力スタイル */
+.chat-input {
+    display: flex;
+    margin-top: 20px;
+}
+.back-button {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.chat-members-button {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* チャットメッセージスタイル */
+.chat-messages {
+    /* チャットメッセージのスタイルを追加 */
+}
+
+.chat-message {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.message-sender {
+    font-weight: bold;
+    color: #007BFF;
+}
+
+
+
+.option-button {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+#openOptions {
+    margin-right: 10px;
+    font-size: 2rem;
+}
+
+/* 送信ボタンのスタイル */
+.send-button {
+    /* 送信ボタンのスタイルを追加 */
+}
+
+/* モーダル内のボタンとアイコンのスタイル */
+.modal-content {
+    color: #000; /* テキストカラーを黒に設定（または必要な色に） */
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.btn-modal {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.square-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px; /* アイコン間のマージンを設定 */
+}
+
+.square-icon i {
+    font-size: 1.5rem; /* アイコンのサイズを調整 */
+    display: inline-block; /* アイコンが崩れないように追加 */
+}
+
+.square-icon.left,
+.square-icon.right {
+    width: 50px; /* アイコンの幅を調整 */
+    height: 50px; /* アイコンの高さを調整 */
+    background-color: #007BFF; /* アイコンの背景色を設定 */
+    color: white; /* アイコンのテキストカラーを白に設定 */
+    border-radius: 10px; /* アイコンの角を設定 */
+}
+
+
+
+/*ヘッダー*/
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a {
+    text-decoration: none;
+    color: #fff;
+}

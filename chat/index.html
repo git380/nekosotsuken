@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop2chat</title>
+    <!-- Bootstrap CSS and Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="/nekosotsuken/chat/style.css">
+</head>
+
+<body>
+<header>
+    <a href="/nekosotsuken/home/index.html">Home</a>
+    <h1>しすてむめい</h1>
+    <div class="header">
+        <button type="button" class="btn btn-header" data-toggle="modal" data-target="#myModal">
+            <i class="bi bi-person-square chat-members-button"></i>
+        </button>
+    </div>
+</header>
+
+<!--     モーダル処理-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">モーダルのタイトル</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a href="/nekosotsuken/qr_search/index.html" class="btn btn-primary btn-modal square-icon">
+                    <i class="bi bi-qr-code-scan"></i>
+                </a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--     モーダル処理-->
+</div>
+
+<!--投稿内容受け取り-->
+<div class="chat-messages" id="chatMessages"></div>
+
+<div class="chat-input">
+
+    <a href="/nekosotsuken/paint/index.html">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalOption">
+            <i class="bi bi-brush option-button" id="openOptions"></i>
+        </button>
+    </a>
+
+    <input type="text" placeholder="メッセージを入力">
+    <button class="btn btn-primary send-button">
+        <i class="bi bi-telegram"></i> 送信
+    </button>
+</div>
+
+
+<!-- Include the external JavaScript file -->
+<script src="index.js"></script>
+<!-- Bootstrap JavaScript dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

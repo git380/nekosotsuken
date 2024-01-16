@@ -1,0 +1,82 @@
+body {
+    font-family: 'Ropa Sans', sans-serif;
+    color: #333;
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#githubLink {
+    position: absolute;
+    right: 0;
+    top: 12px;
+    color: #2D99FF;
+}
+
+h1 {
+    margin: 10px 0;
+    font-size: 40px;
+}
+
+#loadingMessage {
+    text-align: center;
+    padding: 40px;
+    background-color: #eee;
+}
+
+#canvas {
+    width: 100%;
+}
+
+#output {
+    margin-top: 20px;
+    background: #eee;
+    padding: 10px;
+    padding-bottom: 0;
+}
+
+#output div {
+    padding-bottom: 10px;
+    word-wrap: break-word;
+}
+
+#noQRFound {
+    text-align: center;
+}
+
+
+/*body {*/
+/*    background-color: #f8f9fa;*/
+/*    padding: 20px;*/
+/*}*/
+
+/*h1 {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*#loadingMessage {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*#canvas {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*#output {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
+
+/*#outputMessage {*/
+/*    margin-bottom: 10px;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*#outputData {*/
+/*    font-weight: bold;*/
+/*}*/
+
+.btn-container {
+    margin-top: 20px;
+}
