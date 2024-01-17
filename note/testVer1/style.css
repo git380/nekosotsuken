@@ -1,4 +1,28 @@
-/* style.css */
+body{
+    margin: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a {
+    text-decoration: none;
+    color: #fff;
+    text-decoration: #007BFF; /* This line seems incorrect, you can remove it */
+    transition: color 0.3s ease; /* Add transition effect for smooth color change */
+}
+
+header a:hover,
+header a:active {
+    color: greenyellow; /* Change the text color to blue on hover or click */
+}
+
 
 .post-content a {
     color: #1da1f2; /* リンクのテキストカラーを設定 */
@@ -9,24 +33,14 @@
     text-decoration: underline; /* リンクにホバーしたときに下線を表示 */
 }
 
-/* ... (Your existing styles) */
-
-
-body {
-    font-family: Arial, sans-serif;
-}
-
+/*Notion説明*/
 #help-link {
     color: #1da1f2;
-    /* Add any other styles you need */
 }
 
 .main-container {
-    display: flex;
-    flex-direction: column;
     width: 80%;
-    max-width: 100%;
-    margin: 0 auto;
+    margin: 0 auto; /*中央揃え*/
 }
 
 .post-container {
@@ -34,13 +48,14 @@ body {
     flex-direction: column; /*投稿内容の要素が縦に配置される*/
 }
 
+/*投稿内容のレイアウト*/
 .post-item {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+    flex-direction: column; /*投稿内容を立て並びで表示*/
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 10px; /*ボーダーを丸みづける*/
+    margin-top: 20px;
 }
 
 .user-icon {
@@ -61,19 +76,17 @@ body {
     word-wrap: break-word;
 }
 
+/*投稿画面を開くボタンのレイアウト*/
 #open-input {
     position: fixed;
     bottom: 20px;
     right: 20px;
     padding: 20px;
-    /*background-color: #1da1f2;*/
-    /*color: #fff;*/
     border: none;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
-    /*投稿画面を開くボタンのレイアウト*/
 }
 
 label {
@@ -83,26 +96,13 @@ label {
 
 }
 
-/*input {*/
-/*    resize: none;*/
-/*    width:40rem;*/
-/*    !*margin-bottom: 50px;*!*/
-/*    !*height:1rem;*!*/
-
-/*}*/
-
-.a{
-    resize: none;
-    width:40rem;
-    flex-direction: column;
+.input-formBox {
     display: flex;
-    /*    !*入力フォームのレイアウト*!*/
+    flex-direction: column;
+    width: 40rem;
 }
 
-/*#open-input i {*/
-/*    margin-right: 5px;*/
-/*}*/
-
+/*投稿画面のレイアウト*/
 .input-form {
     display: none;
     position: fixed;
@@ -113,30 +113,21 @@ label {
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 2;
-    /*投稿画面のレイアウト*/
 }
 
+/*投稿画面の入力欄レイアウト*/
 input[type="text"] {
     flex: 1;
     padding: 20px;
-    /*width: 20rem;*/
-    /*height: 20px;*/
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-bottom: 50px;
-    /*投稿画面の入力欄レイアウト*/
 }
 
-.input-formBox {
-    display: flex;
-    flex-direction: column;
-    /*入力フォーム、「戻る」、「投稿」ボタンのレイアウト*/
-}
-
+/*ボタンのレイアウト*/
 .button-container {
     display: flex;
-    justify-content: space-between;/*ボタンを親要素の両端に寄せるためのものです*/
-    /*ボタンのレイアウト*/
+    justify-content: space-between; /*ボタンを親要素の両端に寄せるためのものです*/
 }
 
 button {
@@ -164,18 +155,4 @@ button:hover {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 1;
-}
-
-/* Add the animation for sliding down */
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
-.slide-down {
-    animation: slideDown 0.5s ease-in-out;
 }
