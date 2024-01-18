@@ -16,6 +16,9 @@
     <a href="/nekosotsuken/login/index.html">ログアウト</a>
 </header>
 
+<input type="text" id="idInput" placeholder="ID">
+<button onclick="startWebSocket()">参加</button>
+
 <div class="main-container">
     <div class="post-container" id="post-container"></div> <!-- 投稿内容を受け取るクラス-->
 
@@ -40,7 +43,7 @@
             <div class="button-container">
                 <button type="button" onclick="goBack()">戻る</button>
 
-                <button type="button" onclick="inputContentControl()">
+                <button type="button" onclick="sendMessage()">
                     <i class="bi bi-send-check"></i> 投稿
                 </button>
             </div>

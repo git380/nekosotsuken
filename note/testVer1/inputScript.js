@@ -1,3 +1,20 @@
+let webSocket; // WebSocketを格納する変数
+
+// 参加ボタンが押されたときにWebSocketを開始
+function startWebSocket() {
+    webSocket = new WebSocket('ws://localhost:8765');
+
+    // WebSocketの接続が開いたときの処理
+    webSocket.onopen = () => console.log('WebSocketが開かれました。');
+    // メッセージを受信したときの処理
+    webSocket.onmessage = event => {
+        const data = JSON.parse(event.data);
+        inputContentControl(data[0], data[1], data[2], data[3]);
+    };
+    // WebSocketの接続が閉じたときの処理
+    webSocket.onclose = () => console.log('WebSocketが閉じられました。');
+}
+
 //入力フォームを表示する関数
 function openInputArea() {
     //入力フォームにflex要素を与えて表示
@@ -23,10 +40,46 @@ function goBack() {
     closeInputArea();
 }
 
-// 入力内容を制御する関数
-function inputContentControl() {
-    const username = 'ユーザ名'
+//ユーザーアイコン、投稿内容、投稿画像を含む投稿アイテムを作成する
+function inputContentControl(id, userid, title, link) {
+    //ユーザーアイコンを作成し追加
+    const userIcon = document.createElement('div');
+    userIcon.classList.add('user-icon');
+    //ユーザーアイコンの画像要素を作成し追加
+    const iconImage = document.createElement('img');
+    iconImage.src = 'path/to/your/user-icon.jpg';
+    userIcon.appendChild(iconImage);
+    //ユーザー名の要素を作成し追加
+    const usernameElement = document.createElement('div');
+    usernameElement.classList.add('username');
+    usernameElement.innerText = userid;
+    userIcon.appendChild(usernameElement);
 
+    //リンク付きの要素を作成
+    const linkElement = document.createElement('a');
+    linkElement.href = link;
+    linkElement.target = '_blank';//'_blank'はリンクを新しいタブで開くための処理
+    linkElement.textContent = title;
+    //タイトルとリンクから投稿内容を作成し追加
+    const postContentDiv = document.createElement('div');
+    postContentDiv.classList.add('post-content');
+    postContentDiv.appendChild(linkElement);
+
+    //コンテナを作成し、post-itemというクラスを指定（cssでも使っている）
+    const postItem = document.createElement('div');
+    postItem.classList.add('post-item');
+    postItem.appendChild(userIcon);
+    postItem.appendChild(postContentDiv);//投稿内容にリンクとタイトルを追加
+
+    //post-containerは投稿要素を表示するためのコンテナ
+    const postContainer = document.getElementById('post-container');
+    //投稿の都度、一番上の要素に追加
+    postContainer.insertBefore(postItem, postContainer.firstChild);
+}
+
+// 送信ボタンが押されると、入力された文字を送る
+function sendMessage() {
+    const userid = document.getElementById('idInput').value;
     const inputTitleElement = document.getElementById('input-title');
     const inputLinkElement = document.getElementById('input-link');
 
@@ -45,39 +98,13 @@ function inputContentControl() {
         return;
     }
 
-    //ユーザーアイコン、投稿内容、投稿画像を含む投稿アイテムを作成する
-    //ユーザーアイコンを作成し追加
-    const userIcon = document.createElement('div');
-    userIcon.classList.add('user-icon');
-    //ユーザーアイコンの画像要素を作成し追加
-    const iconImage = document.createElement('img');
-    iconImage.src = 'path/to/your/user-icon.jpg';
-    userIcon.appendChild(iconImage);
-    //ユーザー名の要素を作成し追加
-    const usernameElement = document.createElement('div');
-    usernameElement.classList.add('username');
-    usernameElement.innerText = username;
-    userIcon.appendChild(usernameElement);
-
-    //リンク付きの要素を作成
-    const linkElement = document.createElement('a');
-    linkElement.href = link;
-    linkElement.target = '_blank';//'_blank'はリンクを新しいタブで開くための処理
-    linkElement.textContent = title;
-    //タイトルとリンクから投稿内容を作成し追加
-    const postContentDiv = document.createElement('div');
-    postContentDiv.classList.add('post-content');
-    postContentDiv.appendChild(linkElement);
-    //コンテナを作成し、post-itemというクラスを指定（cssでも使っている）
-    const postItem = document.createElement('div');
-    postItem.classList.add('post-item');
-    postItem.appendChild(userIcon);
-    postItem.appendChild(postContentDiv);//投稿内容にリンクとタイトルを追加
-
-    //post-containerは投稿要素を表示するためのコンテナ
-    const postContainer = document.getElementById('post-container');
-    //投稿の都度、一番上の要素に追加
-    postContainer.insertBefore(postItem, postContainer.firstChild);
+    // JavaScriptオブジェクトをJSONへ変換して送信
+    webSocket.send(JSON.stringify([
+        Date.now(),
+        userid,
+        title,
+        link
+    ]));
 
     //投稿フォーム内の情報を削除
     inputTitleElement.value = '';
