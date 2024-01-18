@@ -1,5 +1,25 @@
+let webSocket; // WebSocketを格納する変数
+document.getElementById('uuid').value = Date.now();
+
+// 参加ボタンが押されたときにWebSocketを開始
+function startWebSocket() {
+    webSocket = new WebSocket('ws://localhost:8765');
+
+    // WebSocketの接続が開いたときの処理
+    webSocket.onopen = () => console.log('WebSocketが開かれました。');
+    // メッセージを受信したときの処理
+    webSocket.onmessage = event => {
+        const data = JSON.parse(event.data);
+        if (data[0] === document.getElementById('uuid').value){
+            displayMessages(data[1], data[2]);
+        }
+    };
+    // WebSocketの接続が閉じたときの処理
+    webSocket.onclose = () => console.log('WebSocketが閉じられました。');
+}
+
 // メッセージを表示する関数
-function displayMessages(message) {
+function displayMessages(id, message) {
     // divタグの作成
     const div = document.createElement('div');
     // divタグにchat-messageを追加
@@ -7,7 +27,7 @@ function displayMessages(message) {
     //ユーザー名の要素を作成し追加
     const usernameElement = document.createElement('span');
     usernameElement.classList.add('message-sender');
-    usernameElement.innerText = 'You: ';
+    usernameElement.innerText = id + ': ';
     // テキストコンテンツにメッセージを追加
     div.textContent = message;
     div.insertBefore(usernameElement, div.firstChild);
@@ -23,7 +43,13 @@ function sendMessage() {
 
     if (!message) return;
 
-    displayMessages(message); // メッセージを再表示
+    // JavaScriptオブジェクトをJSONへ変換して送信
+    webSocket.send(JSON.stringify([
+        document.getElementById('uuid').value,
+        document.getElementById('idInput').value,
+        message
+    ]));
+
     inputElement.value = ''; // 入力欄をクリア
 }
 
