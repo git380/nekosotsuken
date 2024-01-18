@@ -5,7 +5,6 @@ import websockets
 
 # クライアントの管理用のセット
 clients = set()
-contact_history = {}
 
 
 # クライアントからのメッセージを受信するコルーチン
@@ -23,9 +22,13 @@ async def handle_client(websocket):  # 接続が確立された
             client_id = data[1]
             title = data[2]
             link = data[3]
+            # JSONのチャット履歴を追加
+            with open('notion_history.json', 'r', encoding='utf-8') as json_file_r:
+                notion_history = json.load(json_file_r)
             # JSONチャット履歴を辞書に追加(キーはStringに変換)
-            contact_history[str(message_id)] = [client_id, title, link]
-            print(f'chat_history追加：{contact_history}')
+            notion_history[str(message_id)] = [client_id, title, link]
+            with open('notion_history.json', 'w', encoding='utf-8') as json_file_w:
+                json.dump(notion_history, json_file_w, ensure_ascii=False, indent=4)
             # クライアントからのメッセージをすべてのクライアントにブロードキャスト
             for client in clients:
                 await client.send(message)

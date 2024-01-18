@@ -5,7 +5,20 @@ function startWebSocket() {
     webSocket = new WebSocket('ws://localhost:8765');
 
     // WebSocketの接続が開いたときの処理
-    webSocket.onopen = () => console.log('WebSocketが開かれました。');
+    webSocket.onopen = () => {
+        console.log('WebSocketが開かれました。');
+        // json履歴受け取り
+        fetch('python/notion_history.json')
+            .then(response => response.json())
+            .then(notionHistory => {
+                console.log(notionHistory)
+                for (const key in notionHistory) {
+                    const data = notionHistory[key];
+                    inputContentControl(key, data[0], data[1], data[2]);
+                }
+            })
+            .catch(error => console.error('エラー:', error));
+    };
     // メッセージを受信したときの処理
     webSocket.onmessage = event => {
         const data = JSON.parse(event.data);
