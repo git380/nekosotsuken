@@ -8,6 +8,11 @@ function startWebSocket() {
     // WebSocketの接続が開いたときの処理
     webSocket.onopen = () => {
         console.log('WebSocketが開かれました。');
+        // オンラインステータス送信
+        webSocket.send(JSON.stringify({
+            'data_type': 'user_info',
+            'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, true]
+        }));
         // json履歴受け取り
         fetch('json/chat_history.json')
             .then(response => response.json())
@@ -21,8 +26,20 @@ function startWebSocket() {
     // メッセージを受信したときの処理
     webSocket.onmessage = event => {
         const data = JSON.parse(event.data);
-        if (data[0] === document.getElementById('uuid').value){
-            displayMessages(data[1], data[2]);
+        if (data['data_type'] === 'user_info') {
+            if (data['data'][0] === document.getElementById('uuid').value) {
+                if (data['data'][2]) {
+                    const user = document.createElement('p');
+                    user.textContent = data['data'][1];
+                    document.getElementById('modal-body').appendChild(user);
+                } else {
+                    document.getElementById('modal-body').querySelectorAll('p').forEach((existingUser) => {
+                        if (existingUser.textContent === data['data'][1]) existingUser.remove();
+                    });
+                }
+            }
+        } else {
+            if (data[0] === document.getElementById('uuid').value) displayMessages(data[1], data[2]);
         }
     };
     // WebSocketの接続が閉じたときの処理
@@ -70,4 +87,13 @@ document.querySelector('.chat-input input').addEventListener('keyup', function (
         // エンターキーが押されたら送信ボタンをクリックする
         document.querySelector('.send-button').click();
     }
+});
+
+// ページが閉じられる前に実行
+window.addEventListener('beforeunload', () => {
+    // オンラインステータス送信
+    webSocket.send(JSON.stringify({
+        'data_type': 'user_info',
+        'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, false]
+    }));
 });
