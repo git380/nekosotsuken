@@ -24,11 +24,6 @@ async def echo(websocket):
             # クリアイベントの処理
             if message == 'clear':
                 canvas_history.clear()
-                # すべての接続されたクライアントにブロードキャスト
-                for client in clients:
-                    if client != websocket:
-                        # 自分以外の全員に送る
-                        await client.send(message)
             else:
                 data = json.loads(message)
                 # 短縮形16進数の色コードに変換
@@ -36,11 +31,12 @@ async def echo(websocket):
                 data[0] = color[:2] + color[3] + color[5]
                 # お絵かきデータの保存
                 canvas_history.append(data)
-                # クライアントからのお絵かきデータをすべてのクライアントにブロードキャスト
-                for client in clients:
-                    if client != websocket:
-                        # 自分以外の全員に送る
-                        await client.send(json.dumps(data))
+                message = json.dumps(data)
+            # クライアントからのお絵かきデータをすべてのクライアントにブロードキャスト
+            for client in clients:
+                if client != websocket:
+                    # 自分以外の全員に送る
+                    await client.send(message)
     finally:
         # クライアントが切断された場合、セットから削除
         clients.remove(websocket)
