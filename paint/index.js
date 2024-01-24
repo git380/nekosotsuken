@@ -1,5 +1,31 @@
 // WebSocketサーバへの接続を開始
 const webSocket = new WebSocket("ws://localhost:8124");
+const uuid = 'uuid'
+
+// WebSocketの接続が開いたときの処理
+webSocket.onopen = () => {
+    console.log('WebSocketが開かれました。');
+    // json履歴受け取り
+    fetch('canvas_history.json')
+        .then(response => response.json())
+        .then(notionHistory => {
+            notionHistory[uuid].forEach(msg => {
+                drawLine(msg[0], msg[1], msg[2], msg[3], msg[4], msg[5]);
+            });
+        })
+        .catch(error => console.error('エラー:', error));
+};
+// サーバからのメッセージを受信したときのイベントハンドラ
+webSocket.onmessage = function (event) {
+    const msg = JSON.parse(event.data); // 受信データをJSONオブジェクトに変換
+    if (msg[0] !== uuid) return;
+    // クリアイベントの処理
+    if (msg[1] === 'clear') context.clearRect(0, 0, canvas.width, canvas.height);
+    // 通常の描画データの処理
+    else drawLine(msg[1], msg[2], msg[3], msg[4], msg[5], msg[6]);
+};
+// WebSocketの接続が閉じたときの処理
+webSocket.onclose = () => console.log('WebSocketが閉じられました。');
 
 // canvas要素の取得と2Dコンテキストの初期化
 const canvas = document.getElementById('canvas');
@@ -35,7 +61,7 @@ canvas.addEventListener('mousemove', function (e) {
     // 線を描画
     drawLine(drawColor, penThicknessInput, lastX, lastY, currentX, currentY);
     // 描画データをサーバに送信
-    webSocket.send(JSON.stringify([drawColor, penThicknessInput, lastX, lastY, currentX, currentY]));
+    webSocket.send(JSON.stringify([uuid, drawColor, penThicknessInput, lastX, lastY, currentX, currentY]));
     lastX = currentX; // 現在の座標を更新
     lastY = currentY; // 現在の座標を更新
 });
@@ -61,21 +87,10 @@ function drawLine(color, lineWidth, fromX, fromY, toX, toY) {
     context.closePath(); // パスを閉じる
 }
 
-// サーバからのメッセージを受信したときのイベントハンドラ
-webSocket.onmessage = function (event) {
-    // クリアイベントの処理
-    if (event.data === 'clear') context.clearRect(0, 0, canvas.width, canvas.height);
-    // 通常の描画データの処理
-    else {
-        const msg = JSON.parse(event.data); // 受信データをJSONオブジェクトに変換
-        drawLine(msg[0], msg[1], msg[2], msg[3], msg[4], msg[5]);
-    }
-};
-
 // キャンバスをクリアする関数
 function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height); // キャンバスをクリア
-    webSocket.send('clear'); // クリアイベントをサーバに送信
+    webSocket.send(JSON.stringify([uuid, 'clear'])); // クリアイベントをサーバに送信
 }
 
 // キャンバスの内容を画像として保存する関数

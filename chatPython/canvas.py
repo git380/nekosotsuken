@@ -5,8 +5,6 @@ import websockets
 
 # クライアントの管理用のセット
 clients = set()
-# お絵かきデータの保存
-canvas_history = []
 
 
 async def echo(websocket):
@@ -15,23 +13,28 @@ async def echo(websocket):
     # 新しいクライアントのWebSocket接続をclientsセットに追加
     clients.add(websocket)
     try:
-        # 過去のチャット履歴を送信
-        for message in canvas_history:
-            await websocket.send(json.dumps(message))
-
         async for message in websocket:
-            print(f'受信内容：{message}')
+            data = json.loads(message)
+            uuid = data[0]
+            # JSONのチャット履歴を追加
+            with open('../paint/canvas_history.json', 'r', encoding='utf-8') as json_file_r:
+                canvas_history = json.load(json_file_r)
             # クリアイベントの処理
-            if message == 'clear':
-                canvas_history.clear()
+            if data[1] == 'clear':
+                canvas_history[uuid].clear()
             else:
-                data = json.loads(message)
+                data = data[1:]
                 # 短縮形16進数の色コードに変換
                 color = '#{:02x}{:02x}{:02x}'.format(*map(int, data[0][4:-1].split(', ')))
                 data[0] = color[:2] + color[3] + color[5]
-                # お絵かきデータの保存
-                canvas_history.append(data)
-                message = json.dumps(data)
+                # JSONチャット履歴を辞書に追加(キーはStringに変換)
+                if uuid in canvas_history:
+                    canvas_history[uuid].append(data)
+                else:
+                    canvas_history[uuid] = [data]
+            # チャット履歴をJSONで保存
+            with open('../paint/canvas_history.json', 'w', encoding='utf-8') as json_file_w:
+                json.dump(canvas_history, json_file_w, ensure_ascii=False, indent=4)
             # クライアントからのお絵かきデータをすべてのクライアントにブロードキャスト
             for client in clients:
                 if client != websocket:
