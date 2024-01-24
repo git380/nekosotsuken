@@ -1,89 +1,87 @@
-document.getElementById('screenshotBtn').addEventListener('click', function () {
-    // Take screenshot
-    takeScreenshot();
+// WebSocketサーバへの接続を開始
+const webSocket = new WebSocket("ws://localhost:8124");
+
+// canvas要素の取得と2Dコンテキストの初期化
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+// 初期描画色、描画状態フラグ、最後の座標を定義
+let drawColor = '#000'; // 初期色は黒
+let drawing = false; // 描画中かどうかのフラグ
+let lastX = 0; // 最後のX座標
+let lastY = 0; // 最後のY座標
+
+// 色選択エリアの設定
+document.querySelectorAll('li').forEach(function (elem) {
+    elem.addEventListener('click', function () {
+        drawColor = this.style.backgroundColor; // 選択された色を現在の描画色に設定
+    });
 });
 
-function takeScreenshot() {
-    // Get the entire document body
-    const body = document.body;
+// キャンバス上でのmousedownイベントハンドラ
+canvas.addEventListener('mousedown', function (e) {
+    lastX = e.offsetX; // クリックされたX座標
+    lastY = e.offsetY; // クリックされたY座標
+    drawing = true; // 描画開始
+});
 
-    // Use html2canvas library to capture the screenshot
-    html2canvas(body).then(canvas => {
-        // Convert the canvas to base64 image data
-        const imageData = canvas.toDataURL('image/png');
+// キャンバスでのmousemoveイベントハンドラ
+canvas.addEventListener('mousemove', function (e) {
+    if (!drawing) return; // 描画中でなければ何もしない
+    // スライダーの要素を取得
+    const penThicknessInput = document.getElementById('penThickness').value;
+    const currentX = e.offsetX;
+    const currentY = e.offsetY;
+    // 線を描画
+    drawLine(drawColor, penThicknessInput, lastX, lastY, currentX, currentY);
+    // 描画データをサーバに送信
+    webSocket.send(JSON.stringify([drawColor, penThicknessInput, lastX, lastY, currentX, currentY]));
+    lastX = currentX; // 現在の座標を更新
+    lastY = currentY; // 現在の座標を更新
+});
 
-        // Create a link element and set the download attribute
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageData;
-        downloadLink.download = 'screenshot.png';
+// キャンバスでのmouseupイベントハンドラ
+canvas.addEventListener('mouseup', function () {
+    drawing = false; // 描画終了
+});
 
-        // Append the link to the body and trigger a click event
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
+// キャンバスでのmouseoutイベントハンドラ
+canvas.addEventListener('mouseout', function () {
+    drawing = false; // 描画終了
+});
 
-        // Remove the link from the DOM
-        document.body.removeChild(downloadLink);
-    });
+// 線を描画する関数
+function drawLine(color, lineWidth, fromX, fromY, toX, toY) {
+    context.strokeStyle = color; // 線の色を設定
+    context.lineWidth = lineWidth; // 線の太さを設定
+    context.beginPath(); // 新しいパスを開始
+    context.moveTo(fromX, fromY); // パスの開始座標を設定
+    context.lineTo(toX, toY); // パスの終了座標を設定
+    context.stroke(); // 線を描画
+    context.closePath(); // パスを閉じる
 }
 
+// サーバからのメッセージを受信したときのイベントハンドラ
+webSocket.onmessage = function (event) {
+    // クリアイベントの処理
+    if (event.data === 'clear') context.clearRect(0, 0, canvas.width, canvas.height);
+    // 通常の描画データの処理
+    else {
+        const msg = JSON.parse(event.data); // 受信データをJSONオブジェクトに変換
+        drawLine(msg[0], msg[1], msg[2], msg[3], msg[4], msg[5]);
+    }
+};
 
-$(document).ready(function () {
-    const canvas = document.getElementById("drawingCanvas");
-    const context = canvas.getContext("2d");
-    const penButton = document.getElementById("penButton");
-    const eraserButton = document.getElementById("eraserButton");
-    const clearButton = document.getElementById("clearButton");
-    const colorPickerIcon = document.getElementById("colorPickerIcon");
-    const colorPicker = document.getElementById("colorPicker");
-    const lineWidthInput = document.getElementById("lineWidth");
-    let isDrawing = false;
-    let drawingMode = "pen"; // ペンまたは消しゴム
+// キャンバスをクリアする関数
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height); // キャンバスをクリア
+    webSocket.send('clear'); // クリアイベントをサーバに送信
+}
 
-    penButton.addEventListener("click", function () {
-        drawingMode = "pen";
-        context.globalCompositeOperation = "source-over"; // ペンモード
-    });
-
-    eraserButton.addEventListener("click", function () {
-        drawingMode = "eraser";
-        context.globalCompositeOperation = "destination-out"; // 消しゴムモード
-    });
-
-    clearButton.addEventListener("click", function () {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-    });
-
-    colorPickerIcon.addEventListener("click", function () {
-        colorPicker.click(); // Trigger the color picker when the icon is clicked
-    });
-
-    colorPicker.addEventListener("input", function () {
-        context.strokeStyle = this.value;
-    });
-
-    lineWidthInput.addEventListener("input", function () {
-        context.lineWidth = this.value;
-    });
-
-    canvas.addEventListener("mousedown", function (e) {
-        isDrawing = true;
-        context.beginPath();
-        context.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
-    });
-
-    canvas.addEventListener("mousemove", function (e) {
-        if (!isDrawing) return;
-        if (drawingMode === "pen" || drawingMode === "eraser") {
-            context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
-            context.stroke();
-        }
-    });
-
-    canvas.addEventListener("mouseup", function () {
-        isDrawing = false;
-    });
-
-    canvas.addEventListener("mouseout", function () {
-        isDrawing = false;
-    });
-});
+// キャンバスの内容を画像として保存する関数
+function saveCanvas() {
+    const link = document.createElement('a'); // リンク要素を作成
+    link.href = canvas.toDataURL("image/png"); // キャンバスの内容を画像URLに変換
+    link.download = "canvas-image.png"; // ダウンロードファイル名を設定
+    link.click(); // リンクをクリックして画像をダウンロード
+}

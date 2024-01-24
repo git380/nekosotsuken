@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>共同絵画アプリ</title>
     <!-- css -->
     <link rel="stylesheet" href="/paint/style.css">
@@ -13,33 +13,38 @@
 </head>
 <body>
 
-<h1 class="text-center">共同絵画アプリ</h1>
-
-<div class="col-md-8">
-    <canvas id="drawingCanvas" width="900" height="700"></canvas>
-</div>
-
-<div class="tools-container text-center">
-    <button id="penButton" class="btn btn-primary">ペン</button>
-    <button id="eraserButton" class="btn btn-danger">消しゴム</button>
-    <button id="clearButton" class="btn btn-warning">全消し</button>
-
+<header>
     <div class="a">
-        <i id="colorPickerIcon" class="bi-bucket bi-palette"></i>
-
-        <input type="color" id="colorPicker" value="#000000" style="display: none;">
+        <a href="/nekosotsuken/home/index.html"><i class="bi bi-arrow-return-left"></i></a>
     </div>
-    <!-- Icon for triggering color picker -->
-    <input type="number" id="lineWidth" value="5" min="1" max="20">
-</div>
+</header>
 
-<div class="container">
-    <!-- Screenshot icon -->
-    <i id="screenshotBtn" class="bi bi-camera-fill screenshot-icon"></i>
-</div>
+<div class="i">
+    <!-- 描画用のキャンバス -->
+    <div class="e">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <!-- 色選択用のリスト -->
+        <ul>
+            <li style="background-color:#000"></li>
+            <li style="background-color:#f00"></li>
+            <li style="background-color:#0f0"></li>
+            <li style="background-color:#00f"></li>
+            <li style="background-color:#ff0"></li>
+            <li style="background-color:#f0f"></li>
+            <li style="background-color:#0ff"></li>
+            <li style="background-color:#fff"></li>
+        </ul>
+        <!-- 太さの選択用のスライダー -->
+        <label for="penThickness">ペンの太さ:</label>
+        <input type="range" id="penThickness" value="5" min="1" max="20">
+        <!-- 保存と消去ボタン -->
+        <div id="button">
+            <button id="save" onclick="saveCanvas()">保存</button>
+            <button id="clear" onclick="clearCanvas()">消去</button>
+        </div>
 
-<!-- html2canvas library (include it in your project) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="index.js"></script>

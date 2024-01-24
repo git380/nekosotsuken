@@ -1,55 +1,58 @@
 body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    margin: 0; /* Added to remove default body margin */
+    margin: 20px;
 }
 
 canvas {
+    border: 5px solid #ccc;
+    cursor: crosshair; /* カーソルを十字に設定 */
+}
+
+#save, #clear {
+    font-size: 120%;
+    width: 80px;
+    height: 50px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    cursor: pointer;
+    display: inline-block;
     border: 1px solid #000;
-    display: block; /* Added for proper canvas rendering */
-    margin: 0 auto; /* Center the canvas */
+    width: 50px;
+    height: 50px;
 }
 
-.col-md-8 {
-    margin: 0 auto; /* Center the column */
-    width: 60%; /* Adjusted width for responsiveness */
-    position: relative;
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px 15px;
 }
 
-h1 {
-    margin-bottom: 20px;
+header a {
+    text-decoration: none;
+    color: #fff;
 }
 
-.row {
-    margin-top: 20px;
+header h1 {
+    text-align: center;
 }
 
-.tools-container {
+.a {
     display: flex;
-    margin-top: 20px;
-    margin-left: 45%;
+    justify-content: space-between;
+    font-size: 20px;
 }
 
-#colorPicker {
-    width: 100%;
-    margin-bottom: 10px; /* Added for spacing */
+.i {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
 }
 
-
-button{
-    margin-top: 10px;
-}
-.bi-bucket{
-    font-size: 3rem;
-    color: #1da1f2;
-}
-
-.tools-container button {
-    margin-right: 10px; /* Adjust the margin as needed */
-    margin-top: 10px;
-}
-
-.bi-camera-fill {
-    font-size: 3rem;
-    color: #007BFF;
+.bi {
+    font-size: 35px;
 }
