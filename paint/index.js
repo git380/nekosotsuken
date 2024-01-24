@@ -6,7 +6,7 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 // 初期描画色、描画状態フラグ、最後の座標を定義
-let drawColor = '#000'; // 初期色は黒
+let drawColor = 'rgb(0, 0, 0)'; // 初期色は黒
 let drawing = false; // 描画中かどうかのフラグ
 let lastX = 0; // 最後のX座標
 let lastY = 0; // 最後のY座標

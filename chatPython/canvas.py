@@ -31,6 +31,9 @@ async def echo(websocket):
                         await client.send(message)
             else:
                 data = json.loads(message)
+                # 短縮形16進数の色コードに変換
+                color = '#{:02x}{:02x}{:02x}'.format(*map(int, data[0][4:-1].split(', ')))
+                data[0] = color[:2] + color[3] + color[5]
                 # お絵かきデータの保存
                 canvas_history.append(data)
                 # クライアントからのお絵かきデータをすべてのクライアントにブロードキャスト
