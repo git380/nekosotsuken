@@ -1,6 +1,8 @@
 let webSocket; // WebSocketを格納する変数
 document.getElementById('uuid').value = Date.now();
 
+let users = {};
+
 // 参加ボタンが押されたときにWebSocketを開始
 function startWebSocket() {
     webSocket = new WebSocket('ws://localhost:8765');
@@ -11,10 +13,27 @@ function startWebSocket() {
         // オンラインステータス送信
         webSocket.send(JSON.stringify({
             'data_type': 'user_info',
-            'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, true]
+            'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, document.getElementById('idInput').value + 'name', true]
         }));
-        // json履歴受け取り
-        fetch('json/chat_history.json')
+        // グループ情報受け取り
+        fetch('json/group_info.json')
+            .then(response => response.json())
+            .then(groupInfo => {
+                const data = groupInfo[document.getElementById('uuid').value][0];
+                for (const key in data) {
+                    users[key] = data[key][0];
+                    if (data[key][1]) {
+                        if (!document.getElementById(`userid-${key}`)) {
+                            const user = document.createElement('p');
+                            user.id = `userid-${key}`;
+                            user.textContent = data[key][0];
+                            document.getElementById('modal-body').appendChild(user);
+                        }
+                    }
+                }
+                // json履歴受け取り
+                return fetch('json/chat_history.json');
+            })
             .then(response => response.json())
             .then(chatHistory => {
                 chatHistory[document.getElementById('uuid').value].forEach(data => {
@@ -28,14 +47,15 @@ function startWebSocket() {
         const data = JSON.parse(event.data);
         if (data['data_type'] === 'user_info') {
             if (data['data'][0] === document.getElementById('uuid').value) {
-                if (data['data'][2]) {
+                if (data['data'][3]) {
+                    users[data['data'][1]] = data['data'][2];
                     const user = document.createElement('p');
-                    user.textContent = data['data'][1];
+                    user.id = `userid-${data['data'][1]}`;
+                    user.textContent = data['data'][2];
                     document.getElementById('modal-body').appendChild(user);
                 } else {
-                    document.getElementById('modal-body').querySelectorAll('p').forEach((existingUser) => {
-                        if (existingUser.textContent === data['data'][1]) existingUser.remove();
-                    });
+                    const existingUser = document.getElementById(`userid-${data['data'][1]}`);
+                    if (existingUser) existingUser.remove();
                 }
             }
         } else {
@@ -55,7 +75,7 @@ function displayMessages(id, message) {
     //ユーザー名の要素を作成し追加
     const usernameElement = document.createElement('span');
     usernameElement.classList.add('message-sender');
-    usernameElement.innerText = id + ': ';
+    usernameElement.innerText = users[id] + ': ';
     // テキストコンテンツにメッセージを追加
     div.textContent = message;
     div.insertBefore(usernameElement, div.firstChild);
@@ -94,6 +114,6 @@ window.addEventListener('beforeunload', () => {
     // オンラインステータス送信
     webSocket.send(JSON.stringify({
         'data_type': 'user_info',
-        'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, false]
+        'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, document.getElementById('idInput').value + 'name', false]
     }));
 });

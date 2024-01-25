@@ -17,22 +17,7 @@ async def handle_client(websocket):  # 接続が確立された
         async for message in websocket:
             # 受信したJSONデータをPythonオブジェクトに変換
             data = json.loads(message)
-            if data.get('data_type', '') == 'user_info':
-                uuid = data.get('data', '')[0]
-                client_id = data.get('data', '')[1]
-                status = data.get('data', '')[2]
-                # JSONのチャット履歴を追加
-                with open('../chat/json/group_info.json', 'r', encoding='utf-8') as json_file_r:
-                    group_info = json.load(json_file_r)
-                # JSONチャット履歴を辞書に追加(キーはStringに変換)
-                if uuid in group_info:
-                    group_info[uuid][0][client_id] = status
-                else:
-                    group_info[uuid] = [{client_id: status}]
-                # チャット履歴をJSONで保存
-                with open('../chat/json/group_info.json', 'w', encoding='utf-8') as json_file_w:
-                    json.dump(group_info, json_file_w, ensure_ascii=False, indent=4)
-            else:
+            if isinstance(data, list):
                 uuid = data[0]
                 client_id = data[1]
                 received_message = data[2]
@@ -47,6 +32,22 @@ async def handle_client(websocket):  # 接続が確立された
                 # チャット履歴をJSONで保存
                 with open('../chat/json/chat_history.json', 'w', encoding='utf-8') as json_file_w:
                     json.dump(chat_history, json_file_w, ensure_ascii=False, indent=4)
+            else:
+                uuid = data.get('data', '')[0]
+                client_id = data.get('data', '')[1]
+                name = data.get('data', '')[2]
+                status = data.get('data', '')[3]
+                # JSONのチャット履歴を追加
+                with open('../chat/json/group_info.json', 'r', encoding='utf-8') as json_file_r:
+                    group_info = json.load(json_file_r)
+                # JSONチャット履歴を辞書に追加(キーはStringに変換)
+                if uuid in group_info:
+                    group_info[uuid][0][client_id] = [name, status]
+                else:
+                    group_info[uuid] = [{client_id: [name, status]}]
+                # チャット履歴をJSONで保存
+                with open('../chat/json/group_info.json', 'w', encoding='utf-8') as json_file_w:
+                    json.dump(group_info, json_file_w, ensure_ascii=False, indent=4)
             # クライアントからのメッセージをすべてのクライアントにブロードキャスト
             for client in clients:
                 await client.send(message)
