@@ -11,7 +11,6 @@ function startWebSocket() {
         fetch('python/notion_history.json')
             .then(response => response.json())
             .then(notionHistory => {
-                console.log(notionHistory)
                 for (const key in notionHistory) {
                     const data = notionHistory[key];
                     inputContentControl(key, data[0], data[1], data[2]);
