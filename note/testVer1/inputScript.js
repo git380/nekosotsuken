@@ -8,7 +8,7 @@ function startWebSocket() {
     webSocket.onopen = () => {
         console.log('WebSocketが開かれました。');
         // json履歴受け取り
-        fetch('python/notion_history.json')
+        fetch('json/notion_history.json')
             .then(response => response.json())
             .then(notionHistory => {
                 for (const key in notionHistory) {

@@ -9,7 +9,7 @@ clients = set()
 
 async def echo(websocket):
     # 接続が確立された
-    print('クライアントが接続しました。')
+    print('canvas-クライアントが接続しました。')
     # 新しいクライアントのWebSocket接続をclientsセットに追加
     clients.add(websocket)
     try:
@@ -43,11 +43,11 @@ async def echo(websocket):
     finally:
         # クライアントが切断された場合、セットから削除
         clients.remove(websocket)
-        print('接続が切断されました。')
+        print('canvas-接続が切断されました。')
 
-
-print('サーバー起動中...')
+start_server = websockets.serve(echo, 'localhost', 8124)
+print('canvas-サーバー起動中...')
 
 # イベントループの開始
-asyncio.get_event_loop().run_until_complete(websockets.serve(echo, 'localhost', 8124))
+asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()

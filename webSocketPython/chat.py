@@ -9,7 +9,7 @@ clients = set()
 
 # クライアントからのメッセージを受信するコルーチン
 async def handle_client(websocket):  # 接続が確立された
-    print("クライアントが接続しました。")
+    print('chat-クライアントが接続しました。')
     try:
         # 新しいクライアントのWebSocket接続をclientsセットに追加
         clients.add(websocket)
@@ -53,14 +53,14 @@ async def handle_client(websocket):  # 接続が確立された
                 await client.send(message)
 
     finally:  # クライアントが切断された
-        print(f"接続が切断されました。")
+        print('chat-接続が切断されました。')
         # クライアントのWebSocket接続をclientsセットから削除
         clients.remove(websocket)
 
 
 # WebSocketサーバーを起動
-start_server = websockets.serve(handle_client, "localhost", 8766)
-print("サーバー起動中...")
+start_server = websockets.serve(handle_client, 'localhost', 8766)
+print('chat-サーバー起動中...')
 
 # イベントループの開始
 asyncio.get_event_loop().run_until_complete(start_server)
