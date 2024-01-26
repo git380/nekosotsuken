@@ -5,7 +5,7 @@ let users = {};
 
 // 参加ボタンが押されたときにWebSocketを開始
 function startWebSocket() {
-    webSocket = new WebSocket('ws://localhost:8765');
+    webSocket = new WebSocket('ws://localhost:8766');
 
     // WebSocketの接続が開いたときの処理
     webSocket.onopen = () => {

@@ -59,7 +59,7 @@ async def handle_client(websocket):  # 接続が確立された
 
 
 # WebSocketサーバーを起動
-start_server = websockets.serve(handle_client, "localhost", 8765)
+start_server = websockets.serve(handle_client, "localhost", 8766)
 print("サーバー起動中...")
 
 # イベントループの開始
