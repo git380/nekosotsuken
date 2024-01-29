@@ -13,7 +13,7 @@ function startWebSocket() {
             .then(notionHistory => {
                 for (const key in notionHistory) {
                     const data = notionHistory[key];
-                    inputContentControl(key, data[0], data[1], data[2]);
+                    inputContentControl(key, data[0], data[1], data[2], data[3]);
                 }
             })
             .catch(error => console.error('エラー:', error));
@@ -21,7 +21,7 @@ function startWebSocket() {
     // メッセージを受信したときの処理
     webSocket.onmessage = event => {
         const data = JSON.parse(event.data);
-        inputContentControl(data[0], data[1], data[2], data[3]);
+        inputContentControl(data[0], data[1], data[2], data[3], data[4]);
     };
     // WebSocketの接続が閉じたときの処理
     webSocket.onclose = () => console.log('WebSocketが閉じられました。');
@@ -52,46 +52,55 @@ function goBack() {
     closeInputArea();
 }
 
-//ユーザーアイコン、投稿内容、投稿画像を含む投稿アイテムを作成する
-function inputContentControl(id, userid, title, link) {
-    //ユーザーアイコンを作成し追加
+// ユーザーアイコン、投稿内容、投稿画像を含む投稿アイテムを作成する
+function inputContentControl(id, userid, title, link, tag) {
+    // ユーザーアイコンを作成し追加
     const userIcon = document.createElement('div');
     userIcon.classList.add('user-icon');
-    //ユーザーアイコンの画像要素を作成し追加
+    // ユーザーアイコンの画像要素を作成し追加
     const iconImage = document.createElement('img');
     iconImage.src = 'path/to/your/user-icon.jpg';
     userIcon.appendChild(iconImage);
-    //ユーザー名の要素を作成し追加
+    // ユーザー名の要素を作成し追加
     const usernameElement = document.createElement('div');
     usernameElement.classList.add('username');
     usernameElement.innerText = userid;
     userIcon.appendChild(usernameElement);
 
-    //リンク付きの要素を作成
+    // タイトルにリンク付きの要素を作成
     const linkElement = document.createElement('a');
     linkElement.href = link;
-    linkElement.target = '_blank';//'_blank'はリンクを新しいタブで開くための処理
+    linkElement.target = '_blank'; // '_blank'はリンクを新しいタブで開くための処理
     linkElement.textContent = title;
-    //タイトルとリンクから投稿内容を作成し追加
+
+    // タグを表示する要素を作成
+    const tagElement = document.createElement('div');
+    const formattedTag = tag.startsWith('#') ? tag : `#${tag}`; // タグの先頭に '#' を追加する
+    tagElement.classList.add('post-tag');
+    tagElement.innerText = formattedTag;
+
+    // タグとリンクから投稿内容を作成し追加
     const postContentDiv = document.createElement('div');
     postContentDiv.classList.add('post-content');
+    postContentDiv.appendChild(tagElement); // タグを先に追加
     postContentDiv.appendChild(linkElement);
 
-    //コンテナを作成し、post-itemというクラスを指定（cssでも使っている）
+    // コンテナを作成し、post-itemというクラスを指定（CSSでも使っている）
     const postItem = document.createElement('div');
     postItem.classList.add('post-item');
     postItem.appendChild(userIcon);
-    postItem.appendChild(postContentDiv);//投稿内容にリンクとタイトルを追加
+    postItem.appendChild(postContentDiv); // 投稿内容にリンクとタイトルを追加
 
-    //post-containerは投稿要素を表示するためのコンテナ
+    // post-containerは投稿要素を表示するためのコンテナ
     const postContainer = document.getElementById('post-container');
-    //投稿の都度、一番上の要素に追加
+    // 投稿の都度、一番上の要素に追加
     postContainer.insertBefore(postItem, postContainer.firstChild);
 }
 
 // 送信ボタンが押されると、入力された文字を送る
 function sendMessage() {
     const userid = document.getElementById('idInput').value;
+    const tagElement = document.getElementById('input-tag');
     const inputTitleElement = document.getElementById('input-title');
     const inputLinkElement = document.getElementById('input-link');
 
@@ -115,13 +124,25 @@ function sendMessage() {
         Date.now(),
         userid,
         title,
-        link
+        link,
+        tagElement.value
     ]));
 
     //投稿フォーム内の情報を削除
+    tagElement.value = '';
     inputTitleElement.value = '';
     inputLinkElement.value = '';
     closeInputArea();
+}
+
+// 検索キーワードに基づいて投稿をフィルタリングおよび表示する関数
+function searchPosts() {
+    const postItems = document.getElementById('post-container').getElementsByClassName('post-item');
+    // 各投稿をループし、検索キーワードが含まれているか確認
+    postItems.forEach(postItem => {
+        // 投稿が検索キーワードを含んでいれば表示し、それ以外は非表示にする
+        postItem.style.display = postItem.querySelector('.post-content').textContent.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase()) ? 'flex' : 'none';
+    })
 }
 
 //入力フォームを非表示にする関数
@@ -133,3 +154,12 @@ function closeInputArea() {
     //スクロールを有効にする
     document.body.style.overflow = 'auto';
 }
+
+// キーが押されたときの処理
+document.getElementById('searchInput').addEventListener('keydown', function (event) {
+    // エンターキーが押されたら実行
+    if (event.key === 'Enter') {
+        event.preventDefault(); // デフォルトの動作を防止
+        searchPosts(); // 検索
+    }
+});

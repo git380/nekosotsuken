@@ -1,26 +1,29 @@
-body{
+body {
     margin: 0;
 }
 
-header {
+.herder {
     background-color: #333;
-    color: #fff;
     padding: 15px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
-header a {
-    text-decoration: none;
-    color: #fff;
-    text-decoration: #007BFF; /* This line seems incorrect, you can remove it */
-    transition: color 0.3s ease; /* Add transition effect for smooth color change */
+.search-container {
+    text-align: center; /* 水平方向の中央揃え */
 }
 
-header a:hover,
-header a:active {
-    color: greenyellow; /* Change the text color to blue on hover or click */
+.bi-house{
+    font-size: 40px;
+}
+
+.search {
+    width: 300px;
+    padding: 20px;
+    border-radius: 50px;
+    border: 2px solid #cccccc; /* 下線を明示的に設定 */
+    /* その他のスタイルを追加できます */
 }
 
 
@@ -116,7 +119,7 @@ label {
 }
 
 /*投稿画面の入力欄レイアウト*/
-input[type="text"] {
+.form {
     flex: 1;
     padding: 20px;
     border: 2px solid #ccc;
