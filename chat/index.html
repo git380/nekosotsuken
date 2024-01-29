@@ -22,11 +22,10 @@
             <i class="bi bi-person-square chat-members-button"></i>
         </button>
     </div>
+    <input type="text" id="idInput" placeholder="ID">
+    <input type="text" id="uuid" placeholder="uuid">
+    <button onclick="startWebSocket()">参加</button>
 </header>
-
-<input type="text" id="idInput" placeholder="ID">
-<input type="text" id="uuid" placeholder="uuid">
-<button onclick="startWebSocket()">参加</button>
 
 <!--投稿内容受け取り-->
 <div class="chat-messages" id="chatMessages"></div>
