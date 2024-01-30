@@ -17,7 +17,7 @@ async def echo(websocket):
             data = json.loads(message)
             uuid = data[0]
             # JSONのチャット履歴を追加
-            with open('../paint/canvas_history.json', 'r', encoding='utf-8') as json_file_r:
+            with open('json/canvas_history.json', 'r', encoding='utf-8') as json_file_r:
                 canvas_history = json.load(json_file_r)
             # クリアイベントの処理
             if data[1] == 'clear':
@@ -33,7 +33,7 @@ async def echo(websocket):
                 else:
                     canvas_history[uuid] = [data]
             # チャット履歴をJSONで保存
-            with open('../paint/canvas_history.json', 'w', encoding='utf-8') as json_file_w:
+            with open('json/canvas_history.json', 'w', encoding='utf-8') as json_file_w:
                 json.dump(canvas_history, json_file_w, ensure_ascii=False, indent=4)
             # クライアントからのお絵かきデータをすべてのクライアントにブロードキャスト
             for client in clients:

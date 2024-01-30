@@ -15,7 +15,11 @@ function startWebSocket() {
             'data': [document.getElementById('uuid').value, document.getElementById('idInput').value, document.getElementById('idInput').value + 'name', true]
         }));
         // グループ情報受け取り
-        fetch('json/group_info.json')
+        fetch('http://127.0.0.1:5000/load', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: 'group_info'
+        })
             .then(response => response.json())
             .then(groupInfo => {
                 const data = groupInfo[document.getElementById('uuid').value][0];
@@ -29,7 +33,11 @@ function startWebSocket() {
                     }
                 }
                 // json履歴受け取り
-                return fetch('json/chat_history.json');
+                return fetch('http://127.0.0.1:5000/load', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: 'chat_history'
+                });
             })
             .then(response => response.json())
             .then(chatHistory => {
