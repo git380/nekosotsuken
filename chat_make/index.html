@@ -3,18 +3,41 @@
 <head>
     <meta charset="utf-8">
     <title>作成</title>
+
+
+<!--    bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!--    css-->
+     <link rel="stylesheet" href="/nekosotsuken/chat_make/style.css">
 </head>
 <body>
+
+
+<header>
+    <a href="/nekosotsuken/home/index.html">Home</a>
+    <h1>しすてむめい</h1>
+</header>
+
+
 <p id="uuid"></p>
 <p id="date"></p>
 
-<!-- ユーザーからの入力を受け取る入力欄 -->
-<label for="inputField">Input name:</label>
-<input type="text" id="inputField" placeholder="グループ名を入力してください">
-<button onclick="sendJsonData()">グループ作成</button>
+<!--&lt;!&ndash; ユーザーからの入力を受け取る入力欄 &ndash;&gt;-->
+<!--<label for="inputField">Input name:</label>-->
+<!--<input type="text" id="inputField" placeholder="グループ名を入力してください">-->
+<!--<button onclick="sendJsonData()">グループ作成</button>-->
 
-<!-- サーバーからの応答を表示する領域 -->
-<div id="response"></div>
+<!--&lt;!&ndash; サーバーからの応答を表示する領域 &ndash;&gt;-->
+<!--<div id="response"></div>-->
+
+<div class="container">
+    <label for="inputField">グループ名をきめてください</label>
+    <input type="text" id="inputField" placeholder="グループ名を入力してください">
+    <button onclick="sendJsonData()">グループ作成</button>
+    <div id="response"></div>
+</div>
 
 <script>
     function sendJsonData() {
