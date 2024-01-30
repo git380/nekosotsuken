@@ -41,10 +41,7 @@ async def handle_client(websocket):  # 接続が確立された
                 with open('../chat/json/group_info.json', 'r', encoding='utf-8') as json_file_r:
                     group_info = json.load(json_file_r)
                 # JSONチャット履歴を辞書に追加(キーはStringに変換)
-                if uuid in group_info:
-                    group_info[uuid][0][client_id] = [name, status]
-                else:
-                    group_info[uuid] = [{client_id: [name, status]}]
+                group_info[uuid][0][client_id] = [name, status]
                 # チャット履歴をJSONで保存
                 with open('../chat/json/group_info.json', 'w', encoding='utf-8') as json_file_w:
                     json.dump(group_info, json_file_w, ensure_ascii=False, indent=4)

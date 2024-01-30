@@ -1,5 +1,4 @@
 let webSocket; // WebSocketを格納する変数
-document.getElementById('uuid').value = Date.now();
 
 let users = {};
 

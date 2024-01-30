@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>作成</title>
+</head>
+<body>
+<p id="uuid"></p>
+<p id="date"></p>
+
+<!-- ユーザーからの入力を受け取る入力欄 -->
+<label for="inputField">Input name:</label>
+<input type="text" id="inputField" placeholder="グループ名を入力してください">
+<button onclick="sendJsonData()">グループ作成</button>
+
+<!-- サーバーからの応答を表示する領域 -->
+<div id="response"></div>
+
+<script>
+    function sendJsonData() {
+        const uuid = Date.now()
+        const date = new Date();
+        const formattedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}-${date.getHours()}:${date.getMinutes()}`
+        // 入力欄からデータを取得
+        const inputData = document.getElementById('inputField').value;
+
+        //uuidと日付の表示
+        document.getElementById('uuid').textContent = uuid;
+        document.getElementById('date').textContent = formattedDate;
+
+        // Fetch APIを使用してPOSTリクエストを送信
+        fetch('http://127.0.0.1:5000/make_chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify([
+                uuid,
+                date,
+                inputData
+            ])
+        })
+            .then(response => {
+                // POSTリクエスト成功
+                // uuidをクリップボードにコピー
+                const tempElement = document.createElement("textarea");
+                tempElement.value = uuid.toString();
+                document.body.appendChild(tempElement);
+                tempElement.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempElement);
+                // 画面遷移
+                window.location.href = '/nekosotsuken/chat/index.html'; // 新しいページのURLを設定してください
+            })
+            .catch(error => {
+                alert('作成に失敗しました')
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
